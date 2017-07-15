@@ -1,6 +1,6 @@
 {
-  "name": "Webhook-echo-sample",
-  "description": "Webhook echo sample",
-  "repository": "https://github.com/SunilSyal/Webhook-and-API.AI-Samples.git",
+  "name": "Morgan-sample",
+  "description": "Morgan Webhook sample",
+  "repository": "https://github.com/keshav787/MorganBot/",
   "keywords": ["api.ai", "natural language"]
 }

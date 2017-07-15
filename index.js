@@ -2,6 +2,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const request = require('request')
 
 const restService = express();
 
@@ -10,73 +11,127 @@ restService.use(bodyParser.urlencoded({
 }));
 
 restService.use(bodyParser.json());
+console.log("Bahar")
 
+var finalsendtext = ""
+var FTC =  1
 restService.post('/echo', function(req, res) {
-    var speech = req.body.result && req.body.result.parameters && req.body.result.parameters.echoText ? req.body.result.parameters.echoText : "Seems like some problem. Speak again."
+    // var speech = req.body.result && req.body.result.parameters && req.body.result.parameters.echoText ? req.body.result.parameters.echoText : "Seems like some problem. Speak again."
+    console.log("andar")
+var speech
+var date
+var FTC =  1
+if(req.body.result && req.body.result.parameters && req.body.result.parameters.echoText)
+{
+  var sendtext = req.body.result.parameters.echoText ;
+  console.log("Send text is " + sendtext);
+  request.post('http://130.211.200.114:8080/AbzWebserviceKiera/rest/UserService/users', {
+      form: {
+          message: sendtext,
+          name: `Keshav Kumar`,
+          datein: "2"
+      }
+  }, function(err, httpResponse, body) {
+      date = body
+
+if(FTC == 1 )
+{
+  if(date == "NA")
+  {
+
+    finalsendtext = finalsendtext.concat(" ").concat(sendtext)
+	  speech = "When is the next meeting date?";
+    console.log("First time message 111111111111111")
+    console.log("No meeting date NOOOOOOOOOOOOOOOOOO")
+    //Set first time counter to  0
+    FTC = 0;
     return res.json({
         speech: speech,
         displayText: speech,
-        source: 'webhook-echo-sample'
+        source: 'morgan-webhook'
     });
-});
-
-restService.post('/slack-test', function(req, res) {
-
-    var slack_message = {
-        "text": "Details of JIRA board for Browse and Commerce",
-        "attachments": [{
-            "title": "JIRA Board",
-            "title_link": "http://www.google.com",
-            "color": "#36a64f",
-
-            "fields": [{
-                "title": "Epic Count",
-                "value": "50",
-                "short": "false"
-            }, {
-                "title": "Story Count",
-                "value": "40",
-                "short": "false"
-            }],
-
-            "thumb_url": "https://stiltsoft.com/blog/wp-content/uploads/2016/01/5.jira_.png"
-        }, {
-            "title": "Story status count",
-            "title_link": "http://www.google.com",
-            "color": "#f49e42",
-
-            "fields": [{
-                "title": "Not started",
-                "value": "50",
-                "short": "false"
-            }, {
-                "title": "Development",
-                "value": "40",
-                "short": "false"
-            }, {
-                "title": "Development",
-                "value": "40",
-                "short": "false"
-            }, {
-                "title": "Development",
-                "value": "40",
-                "short": "false"
-            }]
-        }]
-    }
-    return res.json({
-        speech: "speech",
-        displayText: "speech",
-        source: 'webhook-echo-sample',
-        data: {
-            "slack": slack_message
+  }
+  else {
+    finalsendtext = finalsendtext.concat(" ").concat(sendtext)
+    console.log("First time message 111111111111111")
+    console.log("Has meeting date YESSSSSSSSSSSSSSSSS")
+    console.log("Calling find store url ... final text is ")
+    console.log(finalsendtext)
+    request.post('http://130.211.200.114:8080/AbzWebserviceKiera/rest/UserService/users', {
+        form: {
+            message: finalsendtext,
+            name: `Agent #`,
+            datein: "0"
         }
+    })
+    speech = "Thanks for sharing your meeting notes. Do you want to see the analysis result?";
+    FTC = 1;
+    finalsendtext = ""
+    return res.json({
+        speech: speech,
+        displayText: speech,
+        source: 'morgan-webhook'
     });
+  }
+}
+else {
+  if(date == "NA")
+  {
+    finalsendtext = finalsendtext.concat(" ").concat(sendtext)
+    console.log("Repeated message 2222222222222222")
+    console.log("No meeting date NOOOOOOOOOOOOOOOOOOOOOOOOOO")
+    speech = "When is the next meeting date?";
+    FTC = 0;
+    return res.json({
+        speech: speech,
+        displayText: speech,
+        source: 'morgan-webhook'
+    });
+  }
+  else {
+    finalsendtext = finalsendtext.concat(" ").concat(sendtext)
+    console.log("Repeated message 2222222222222222")
+    console.log("has meeting date yesssssssssssssssssssssss")
+    console.log("Calling find store url ... final text is ")
+    console.log(finalsendtext)
+    request.post('http://130.211.200.114:8080/AbzWebserviceKiera/rest/UserService/users', {
+        form: {
+            message: finalsendtext,
+            name: `Agent #`,
+            datein: "0"
+        }
+    })
+
+    speech = "Thanks for sharing your meeting notes. Do you want to see the analysis result?";
+    FTC = 1;
+    finalsendtext = " "
+    return res.json({
+        speech: speech,
+        displayText: speech,
+        source: 'morgan-webhook'
+    });
+  }
+
+}
+
+
+
+  });
+
+}
+else {
+
+  speech = "Seems like some problem. Speak again." ;
+  return res.json({
+      speech: speech,
+      displayText: speech,
+      source: 'webhook-echo-sample'
+  });
+}
+
+
 });
 
-
-
-
-restService.listen((process.env.PORT || 8000), function() {
+restService.listen((process.env.PORT || 8147), function() {
     console.log("Server up and listening");
 });

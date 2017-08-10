@@ -21,9 +21,19 @@ restService.post('/echo', function(req, res) {
 var speech
 var date
 var FTC =  1
+
+//console.log(req.body.result);
+//console.log(req.body.result.contexts);
+
+
 if(req.body.result && req.body.result.parameters && req.body.result.parameters.echoText)
 {
-  var sendtext = req.body.result.parameters.echoText ;
+	//echoText.original
+	console.log("received text....")
+	console.log(req.body.result.contexts[0].parameters["echoText.original"]);
+  //var sendtext = req.body.result.parameters.echoText.original ;
+  
+  var sendtext = req.body.result.contexts[0].parameters["echoText.original"];
   console.log("Send text is " + sendtext);
   request.post('http://130.211.200.114:8080/AbzWebserviceKiera/rest/UserService/users', {
       form: {

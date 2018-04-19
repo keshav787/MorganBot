@@ -35,7 +35,7 @@ if(req.body.result && req.body.result.parameters && req.body.result.parameters.e
   
   var sendtext = req.body.result.contexts[0].parameters["echoText.original"];
   console.log("Send text is " + sendtext);
-  request.post('http://130.211.200.114:8080/AbzWebserviceKiera/rest/UserService/users', {
+  request.post('http://35.194.34.163:8080/AbzWebserviceKiera/rest/UserService/users', {
       form: {
           message: sendtext,
           name: `Keshav Kumar`,
@@ -67,7 +67,7 @@ if(FTC == 1 )
     console.log("Has meeting date YESSSSSSSSSSSSSSSSS")
     console.log("Calling find store url ... final text is ")
     console.log(finalsendtext)
-    request.post('http://130.211.200.114:8080/AbzWebserviceKiera/rest/UserService/users', {
+    request.post('http://35.194.34.163:8080/AbzWebserviceKiera/rest/UserService/users', {
         form: {
             message: finalsendtext,
             name: `Agent #`,
@@ -104,7 +104,7 @@ else {
     console.log("has meeting date yesssssssssssssssssssssss")
     console.log("Calling find store url ... final text is ")
     console.log(finalsendtext)
-    request.post('http://130.211.200.114:8080/AbzWebserviceKiera/rest/UserService/users', {
+    request.post('http://35.194.34.163:8080/AbzWebserviceKiera/rest/UserService/users', {
         form: {
             message: finalsendtext,
             name: `Agent #`,
